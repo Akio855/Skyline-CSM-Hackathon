@@ -13,6 +13,8 @@ class Player(pygame.sprite.Sprite):
 
         self.image = pygame.image.load('player.png')
         self.rect = self.image.get_rect()
+
+        # Allows for initialization of the player onto a selected location
         self.rect.x = x
         self.rect.y = y
 
@@ -44,12 +46,19 @@ class Player(pygame.sprite.Sprite):
 
         self.rect.x += self.change_x
         collide_list = pygame.sprite.spritecollide(self, self.walls, False)
+
+        # collide list is a list of all of the sprites that the player is 
+        # currently in contact with. If they are currently touching something,
+        # the following code will check if the player is moving left or right
+        # and make sure that the player doesn't move into the other sprite by setting
+        # the player's position to the side of the other sprite
         for wall in collide_list:
             if self.change_x > 0:
                 self.rect.right = wall.rect.left
             else:
                 self.rect.left = wall.rect.right
 
+        # does the same as above, but with up and down
         self.rect.y += self.change_y
         collide_list = pygame.sprite.spritecollide(self, self.walls, False)
         for wall in collide_list:
@@ -75,6 +84,10 @@ clock = pygame.time.Clock()
 
 all_sprite_list = pygame.sprite.Group()
 wall_list = pygame.sprite.Group()
+
+# sprite.Group() lets you use the collide function as detailed above.
+# It also allows you to call the update() function for all the sprites
+# at once
 
 player = Player(50, 50)
 all_sprite_list.add(player)
